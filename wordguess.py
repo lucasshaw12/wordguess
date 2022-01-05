@@ -35,6 +35,8 @@ def main():
   # Put a space between each dash
   print(" ".join(display))
 
+  keyboard.add_hotkey('Esc', lambda: exit(0))
+
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
     guess = input(str("Please enter a guess for the {} ".format(len(display)) + "letter word: "))#[0]
@@ -44,10 +46,14 @@ def main():
     print ("Attempts: ")
     print (attempts)
 
+    
+
     # while True:
-    #     if keyboard.read_key() == 'esc':
-    #       print("Exiting...")
-    #       sys.exit(0) # this exits your program with exit code 0
+    #   if keyboard.read_key() == 'p':
+    #     print("Exiting...")
+    #     sys.exit(0) # this exits your program with exit code 0
+    #   else:
+    #     continue
       
     # Search through the letters in answer
     for i in range(len(wordChosen)):
@@ -76,7 +82,7 @@ def main():
     
           
 
-  print("Well done, you guessed it right in " + str(attempts) + " attempts!")
+  print("Well done, you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
 
   # Ask the player whether they want to retry
   while display == wordChosen:
@@ -101,12 +107,12 @@ main()
 # fix the hints to reflect which word was chosen, 
 # add a name for each player at the start of each game
 # fix bug if 'enter' is pressed then error occurs 
-# Setup GIT repo
+# 
 
 # Done list -----------
 # Basic game function
 # Display how many turns the player took to get the guess correct
-#
+# Setup GIT repo
 #
 #
 #
