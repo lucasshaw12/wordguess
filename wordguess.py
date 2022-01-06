@@ -3,6 +3,7 @@ def main():
   # import readchar
   import keyboard
   import sys
+  import numpy
 
 
   # Create a list of hangman words
@@ -18,7 +19,6 @@ def main():
 
   # Choose a word from the list at random
   wordChosen = random.choice(wordList)
-  print(wordChosen) # Added for testing
 
   # Create an empty list to store the used letters
   used = []
@@ -35,8 +35,6 @@ def main():
   # Put a space between each dash
   print(" ".join(display))
 
-  keyboard.add_hotkey('Esc', lambda: exit(0))
-
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
     guess = input(str("Please enter a guess for the {} ".format(len(display)) + "letter word: "))#[0]
@@ -46,15 +44,26 @@ def main():
     print ("Attempts: ")
     print (attempts)
 
-    
+    print(wordChosen) # Added for testing
+
+    # Provide a hint if unsuccessful after 7 attempts
+    if attempts >= 7 and guess != wordChosen and wordChosen in wordList[0:6]:
+      print("HINT: It's an animal")
+    elif attempts >= 7 and guess != wordChosen and wordChosen in wordList[7:11]:
+      print("HINT: It's a vehicle!")
+    elif attempts >= 7 and guess != wordChosen and wordChosen in wordList[11:14]:
+      print("HINT: It's food!")  
+
+    # Allow the player to exit the game, 
+    # Currently uses temrinal function of ctrl + c
 
     # while True:
-    #   if keyboard.read_key() == 'p':
-    #     print("Exiting...")
-    #     sys.exit(0) # this exits your program with exit code 0
-    #   else:
-    #     continue
-      
+    #  if keyboard.read_key() == 'esc':
+    #   print("Exiting...")
+    #   sys.exit(0) # this exits your program with exit code 0
+    #  else:
+    #     break
+
     # Search through the letters in answer
     for i in range(len(wordChosen)):
       if wordChosen[i] == guess:
@@ -65,22 +74,12 @@ def main():
         
     # Print the string with guessed letters (with spaces in between))
     print(" ".join(display))
-    
-    # Provide a hint if unsuccessful after 4 attempts
-    if attempts >= 7 and guess != wordChosen:
-      if wordChosen[0]:
-        print("HINT: It's an animal")
 
     # Create a space for formatting  
-    print("\n\n\n")
+    print("\n")
 
     # Add +1 to attempts after each guess
     attempts = attempts + 1
-
-    # Allow the player to exit the game, 
-    # Currently uses temrinal function of ctrl + c
-    
-          
 
   print("Well done, you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
 
@@ -106,7 +105,7 @@ main()
 # create a scoreboard to store the number of attempts, name, date and time, 
 # fix the hints to reflect which word was chosen, 
 # add a name for each player at the start of each game
-# fix bug if 'enter' is pressed then error occurs 
+# fix bug if 'enter' and 'esc'is pressed then error occurs 
 # 
 
 # Done list -----------
