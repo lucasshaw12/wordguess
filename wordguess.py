@@ -1,20 +1,21 @@
 def main():  
   import random
   # import readchar
-  import keyboard
+  import datetime, time
   import sys
-  import numpy
-
-
+  import csv
+  
   # Create a list of hangman words
   wordList = ["cat","dog","mouse", "giraffe", "otter", "shark", "sheep", "car", "motorbike",
   "bus", "aeroplane", "pizza", "chips", "cheese"]
 
   # Intructions for the player
+  print("\n")
   print("************* game start *************\n".upper())
   print("instructions:\n".upper())
   print("* " + "Only the first letter is registered for your guess".capitalize())
   print("* " + "After 8 unsuccessful attempts you will receive a hint".capitalize())
+  print("* " + "You will be prompted to include a username for each game".capitalize())
   print("* " + "your score will be added to a leaderboard at the end of each game".capitalize())
 
   # Choose a word from the list at random
@@ -24,16 +25,22 @@ def main():
   used = []
 
   # Counter stops the game once all letters have been guessed correctly
-  attempts = 0
+  attempts = 1
 
   # Create a variable to store and display the player's guesses  
   display = wordChosen
   for i in range (len(display)):
     #replace each letter with a '_'
     display = display[0:i] + "_" + display[i+1:]
-    
   # Put a space between each dash
   print(" ".join(display))
+
+  # Ask the a player for their username - WORKS - COMMENTED FOR TESTING SPEED
+  print("What is your username: ")
+  myName = input()
+  print("\n")
+  print("Hi, " + str(myName) + " welcome to the Word Guessing Game!")
+  print("\n")
 
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
@@ -56,7 +63,6 @@ def main():
 
     # Allow the player to exit the game, 
     # Currently uses temrinal function of ctrl + c
-
     # while True:
     #  if keyboard.read_key() == 'esc':
     #   print("Exiting...")
@@ -81,7 +87,34 @@ def main():
     # Add +1 to attempts after each guess
     attempts = attempts + 1
 
-  print("Well done, you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
+    #capture date and time of sucessful attempt
+    if display == wordChosen:
+      dt = datetime.datetime.now()
+      dtFullDate = dt.day, dt.month, dt.year
+      print(str(dtFullDate))
+      print('\n')
+
+      # When successful, add the username to the scoreboard.csv file list and display (Excel)
+      # Run a function that displays the scoreboard 
+      # Add the round to the scoreboard
+      outputFile = open('scoreboard.csv', 'w', newline='')
+      outputWriter = csv.DictWriter(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
+      outputWriter.writeheader()
+      outputWriter.writerow({'Name' : myName, 'Date' : dtFullDate, 'Attempts' : attempts, 'Word Chosen' : wordChosen})
+      #outputWriter.writerow([myName, attemts, wordChosen, timestamp])
+      outputFile.close()
+
+      # Display the scoreboard from the scoreboard.csv file
+      print(("************* scoreboard *************\n".upper()))
+      outputFile = open('scoreboard.csv')
+      outputDictReader = csv.DictReader(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
+      for row in outputDictReader:
+        print([myName], [dtFullDate], [attempts], [wordChosen])
+      #outputWriter.writerow([myName, dtFullDate, attempts, wordChosen])
+      outputFile.close()
+      break
+
+  print("Well done " + myName.capitalize() + ", you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
 
   # Ask the player whether they want to retry
   while display == wordChosen:
@@ -94,8 +127,11 @@ def main():
         exit()
         print("else")
       else:
+        print("\n")
         print("Invalid input. Please use (Y = yes / N = no)")
         print("\n")
+
+
 
 main()
 
@@ -103,17 +139,16 @@ main()
 # TO DO -------------
 # add a quit function,
 # create a scoreboard to store the number of attempts, name, date and time, 
-# fix the hints to reflect which word was chosen, 
-# add a name for each player at the start of each game
-# fix bug if 'enter' and 'esc'is pressed then error occurs 
-# 
+# Function to call the scoreboard and display scoreboard list
+# fix bug if 'enter' and 'esc' is pressed then error occurs 
+# Clean up the instruction, cleaner way to write multiple lines of 'print'
 
 # Done list -----------
 # Basic game function
-# Display how many turns the player took to get the guess correct
+# Display how many turns the player took to get the guess correctly
 # Setup GIT repo
-#
-#
+# fix the hints to reflect which word was chosen, 
+# add a name for each player at the start of each game - link that to the scoreboard
 #
 
 
