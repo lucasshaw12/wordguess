@@ -10,13 +10,13 @@ def main():
   "bus", "aeroplane", "pizza", "chips", "cheese"]
 
   # Intructions for the player
-  print("\n")
-  print("************* game start *************\n".upper())
-  print("instructions:\n".upper())
-  print("* " + "Only the first letter is registered for your guess".capitalize())
-  print("* " + "After 8 unsuccessful attempts you will receive a hint".capitalize())
-  print("* " + "You will be prompted to include a username for each game".capitalize())
-  print("* " + "your score will be added to a leaderboard at the end of each game".capitalize())
+  print("""\n
+************* GAME START *************\n
+INSTRUCTIONS:\n
+* Only the first letter is registered for your guess
+* After 8 unsuccessful attempts you will receive a hint
+* You will be prompted to include a username for each game
+* Your score will be added to a leaderboard at the end of each game""")
 
   # Choose a word from the list at random
   wordChosen = random.choice(wordList)
@@ -39,7 +39,7 @@ def main():
   print("What is your username: ")
   myName = input()
   print("\n")
-  print("Hi, " + str(myName) + " welcome to the Word Guessing Game!")
+  print("Hi, " + str(myName) + ", welcome to the Word Guessing Game!")
   print("\n")
 
   # Keep asking the player until all letters are guessed
@@ -91,28 +91,25 @@ def main():
     if display == wordChosen:
       dt = datetime.datetime.now()
       dtFullDate = dt.day, dt.month, dt.year
-      print(str(dtFullDate))
       print('\n')
 
       # When successful, add the username to the scoreboard.csv file list and display (Excel)
       # Run a function that displays the scoreboard 
       # Add the round to the scoreboard
-      outputFile = open('scoreboard.csv', 'w', newline='')
-      outputWriter = csv.DictWriter(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
-      outputWriter.writeheader()
-      outputWriter.writerow({'Name' : myName, 'Date' : dtFullDate, 'Attempts' : attempts, 'Word Chosen' : wordChosen})
-      #outputWriter.writerow([myName, attemts, wordChosen, timestamp])
-      outputFile.close()
+      with open('scoreboard.csv', 'a', newline='') as outputFile:
+        outputWriter = csv.DictWriter(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
+        #outputWriter.writeheader()
+        outputWriter.writerow({'Name' : myName, 'Date' : dtFullDate, 'Attempts' : attempts, 'Word Chosen' : wordChosen})
+        #outputWriter.writerow([myName, dtFullDate, attempts, wordChosen])
+        outputFile.close()
 
-      # Display the scoreboard from the scoreboard.csv file
-      print(("************* scoreboard *************\n".upper()))
-      outputFile = open('scoreboard.csv')
-      outputDictReader = csv.DictReader(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
-      for row in outputDictReader:
-        print([myName], [dtFullDate], [attempts], [wordChosen])
-      #outputWriter.writerow([myName, dtFullDate, attempts, wordChosen])
-      outputFile.close()
-      break
+        # Display the scoreboard from the scoreboard.csv file
+        print(("************* scoreboard *************\n".upper()))
+        outputFile = open('scoreboard.csv')
+        outputDictReader = csv.DictReader(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
+        for row in outputDictReader:
+          print(row['Name'], row['Date'], row['Attempts'], row['Word Chosen'])
+        outputFile.close()
 
   print("Well done " + myName.capitalize() + ", you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
 
@@ -131,17 +128,14 @@ def main():
         print("Invalid input. Please use (Y = yes / N = no)")
         print("\n")
 
-
-
 main()
 
 
 # TO DO -------------
 # add a quit function,
 # create a scoreboard to store the number of attempts, name, date and time, 
-# Function to call the scoreboard and display scoreboard list
 # fix bug if 'enter' and 'esc' is pressed then error occurs 
-# Clean up the instruction, cleaner way to write multiple lines of 'print'
+# Remove operators from the printed text from the csv file
 
 # Done list -----------
 # Basic game function
@@ -149,8 +143,8 @@ main()
 # Setup GIT repo
 # fix the hints to reflect which word was chosen, 
 # add a name for each player at the start of each game - link that to the scoreboard
-#
-
+# Clean up the instruction, cleaner way to write multiple lines of 'print'
+# Function to call the scoreboard and display scoreboard list (currently print the scoreboard each round)
 
 
 
