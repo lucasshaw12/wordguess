@@ -1,9 +1,9 @@
 def main():  
   import random
-  # import readchar
   import datetime, time
   import sys
   import csv
+  import keyboard
   
   # Create a list of hangman words
   wordList = ["cat","dog","mouse", "giraffe", "otter", "shark", "sheep", "car", "motorbike",
@@ -14,9 +14,10 @@ def main():
 ************* GAME START *************\n
 INSTRUCTIONS:\n
 * Only the first letter is registered for your guess
-* After 8 unsuccessful attempts you will receive a hint
-* You will be prompted to include a username for each game
+* After 10 unsuccessful attempts you will receive a hint
+* You will be prompted to include a username for each game (min of 3 characters - max of 6 characters)
 * Your score will be added to a leaderboard at the end of each game""")
+
 
   # Choose a word from the list at random
   wordChosen = random.choice(wordList)
@@ -36,39 +37,49 @@ INSTRUCTIONS:\n
   print(" ".join(display))
 
   # Ask the a player for their username - WORKS - COMMENTED FOR TESTING SPEED
-  print("What is your username: ")
-  myName = input()
+  print("What is your username:")
+  myName = input()[0:6]
   print("\n")
+  while len(myName)==0:
+    print("Please enter your username (Max 6 characters in length):")
+    myName = input()
   print("Hi, " + str(myName) + ", welcome to the Word Guessing Game!")
   print("\n")
 
+  # # Set the allowed chars for the myName input
+  # allowedCharacters = 'abcdefghijklmnopqrstuvwxyz'
+  # while len(myName) == 0:
+  #   print("Please enter your username (Max 6 letters):")
+  #   myName=input()
+  # print("Hi, " + str(myName) + ", welcome to the Word Guessing Game!")
+  # print("\n") 
+
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
-    guess = input(str("Please enter a guess for the {} ".format(len(display)) + "letter word: "))#[0]
+    guess = input(str("Please enter a guess for the {} ".format(len(display)) + "letter word: "))[0:1]
     guess = guess.lower()
     #Add the players guess to the list of used letters
     used.extend(guess)
-    print ("Attempts: ")
-    print (attempts)
+    print("Attempts: ")
+    print(attempts)
 
     print(wordChosen) # Added for testing
 
     # Provide a hint if unsuccessful after 7 attempts
-    if attempts >= 7 and guess != wordChosen and wordChosen in wordList[0:6]:
+    if attempts >= 10 and guess != wordChosen and wordChosen in wordList[0:6]:
       print("HINT: It's an animal")
-    elif attempts >= 7 and guess != wordChosen and wordChosen in wordList[7:11]:
+    elif attempts >= 10 and guess != wordChosen and wordChosen in wordList[7:11]:
       print("HINT: It's a vehicle!")
-    elif attempts >= 7 and guess != wordChosen and wordChosen in wordList[11:14]:
+    elif attempts >= 10 and guess != wordChosen and wordChosen in wordList[11:14]:
       print("HINT: It's food!")  
 
-    # Allow the player to exit the game, 
-    # Currently uses temrinal function of ctrl + c
-    # while True:
-    #  if keyboard.read_key() == 'esc':
-    #   print("Exiting...")
-    #   sys.exit(0) # this exits your program with exit code 0
-    #  else:
-    #     break
+      # # Allow the player to exit the game, 
+      # # Currently uses temrinal function of ctrl + c
+      # if keyboard.read_key() == 'p':
+      #   print("Exiting...")
+      #   sys.exit(0) # this exits your program with exit code 0
+      # else:
+      #   break
 
     # Search through the letters in answer
     for i in range(len(wordChosen)):
@@ -87,7 +98,7 @@ INSTRUCTIONS:\n
     # Add +1 to attempts after each guess
     attempts = attempts + 1
 
-    #capture date and time of sucessful attempt
+    # Capture date and time of sucessful attempt
     if display == wordChosen:
       dt = datetime.datetime.now()
       dtFullDate = dt.day, dt.month, dt.year
@@ -105,6 +116,7 @@ INSTRUCTIONS:\n
 
         # Display the scoreboard from the scoreboard.csv file
         print(("************* scoreboard *************\n".upper()))
+        print("""Name     Date       Atmpt Word""")
         outputFile = open('scoreboard.csv')
         outputDictReader = csv.DictReader(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
         for row in outputDictReader:
@@ -133,9 +145,9 @@ main()
 
 # TO DO -------------
 # add a quit function,
-# create a scoreboard to store the number of attempts, name, date and time, 
-# fix bug if 'enter' and 'esc' is pressed then error occurs 
-# Remove operators from the printed text from the csv file
+# Add a header to the scoreboard.csv file without it writing after each gameround
+# for the name input, ensure that a minimum of 3 characters are provided and only letters
+# Factor code = add classes, functions etc
 
 # Done list -----------
 # Basic game function
@@ -144,7 +156,6 @@ main()
 # fix the hints to reflect which word was chosen, 
 # add a name for each player at the start of each game - link that to the scoreboard
 # Clean up the instruction, cleaner way to write multiple lines of 'print'
-# Function to call the scoreboard and display scoreboard list (currently print the scoreboard each round)
-
-
-
+# Create a scoreboard to store the number of attempts, name, date and time, (currently prints the scoreboard each gameround)
+# Remove operators from the printed text from the csv file
+# fix bug if 'enter' and 'esc' is pressed on the guess stage then error occurs 
