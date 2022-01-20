@@ -37,7 +37,7 @@ INSTRUCTIONS:\n
   print(" ".join(display))
 
   # Ask the a player for their username - WORKS - COMMENTED FOR TESTING SPEED
-  print("What is your username:")
+  print("What is your username (Max 6 letters): ")
   myName = input()[0:6]
   print("\n")
   while len(myName)==0:
@@ -47,7 +47,7 @@ INSTRUCTIONS:\n
   print("\n")
 
   # # Set the allowed chars for the myName input
-  # allowedCharacters = 'abcdefghijklmnopqrstuvwxyz'
+  specChar = "`[];'./§~`{}|:?><"
   # while len(myName) == 0:
   #   print("Please enter your username (Max 6 letters):")
   #   myName=input()
@@ -57,6 +57,9 @@ INSTRUCTIONS:\n
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
     guess = input(str("Please enter a guess for the {} ".format(len(display)) + "letter word: "))[0:1]
+    if guess.isspace() or guess.isdigit() or guess == "" or guess == specChar:
+      print("Invalid character, please use a single letter\n")
+      continue
     guess = guess.lower()
     #Add the players guess to the list of used letters
     used.extend(guess)
@@ -147,7 +150,7 @@ main()
 # add a quit function,
 # Add a header to the scoreboard.csv file without it writing after each gameround
 # for the name input, ensure that a minimum of 3 characters are provided and only letters
-# Factor code = add classes, functions etc
+# Refactor code = add classes, functions etc
 
 # Done list -----------
 # Basic game function
@@ -159,3 +162,4 @@ main()
 # Create a scoreboard to store the number of attempts, name, date and time, (currently prints the scoreboard each gameround)
 # Remove operators from the printed text from the csv file
 # fix bug if 'enter' and 'esc' is pressed on the guess stage then error occurs 
+# Ensure no numbers are allowed within input() when guessing a letter
