@@ -6,8 +6,12 @@ def main():
   import keyboard
   
   # Create a list of hangman words
-  wordList = ["cat","dog","mouse", "giraffe", "otter", "shark", "sheep", "car", "motorbike",
-  "bus", "aeroplane", "pizza", "chips", "cheese"]
+  wordList = []
+  with open('worddict.csv', encoding='utf-8-sig') as outputFile:
+    outputReader = csv.reader(outputFile)
+    for row in outputReader:
+      wordList.append(row[0])  
+  outputFile.close()
 
   # Intructions for the player
   print("""\n
@@ -36,7 +40,7 @@ INSTRUCTIONS:\n
   # Put a space between each dash
   print(" ".join(display))
 
-  # Ask the a player for their username - WORKS - COMMENTED FOR TESTING SPEED
+  # Ask the a player for their username
   print("What is your username (Max 6 letters): ")
   myName = input()[0:6]
   print("\n")
@@ -47,7 +51,7 @@ INSTRUCTIONS:\n
   print("\n")
 
   # # Set the allowed chars for the myName input
-  specChar = "`[];'./§~`{}|:?><"
+  # specChar = "`[];'./§~`{}|:?><"
   # while len(myName) == 0:
   #   print("Please enter your username (Max 6 letters):")
   #   myName=input()
@@ -57,7 +61,7 @@ INSTRUCTIONS:\n
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
     guess = input(str("Please enter a guess for the {} ".format(len(display)) + "letter word: "))[0:1]
-    if guess.isspace() or guess.isdigit() or guess == "" or guess == specChar:
+    if guess.isspace() or guess.isdigit() or guess == "":
       print("Invalid character, please use a single letter\n")
       continue
     guess = guess.lower()
@@ -66,7 +70,7 @@ INSTRUCTIONS:\n
     print("Attempts: ")
     print(attempts)
 
-    print(wordChosen) # Added for testing
+    print(wordChosen) # Added for testing ///////////////////////////////////////////////////////////
 
     # Provide a hint if unsuccessful after 7 attempts
     if attempts >= 10 and guess != wordChosen and wordChosen in wordList[0:6]:
@@ -152,6 +156,7 @@ main()
 # for the name input, ensure that a minimum of 3 characters are provided and only letters
 # Refactor code = add classes, functions etc
 
+
 # Done list -----------
 # Basic game function
 # Display how many turns the player took to get the guess correctly
@@ -162,4 +167,5 @@ main()
 # Create a scoreboard to store the number of attempts, name, date and time, (currently prints the scoreboard each gameround)
 # Remove operators from the printed text from the csv file
 # fix bug if 'enter' and 'esc' is pressed on the guess stage then error occurs 
-# Ensure no numbers are allowed within input() when guessing a letter
+# Ensure no numbers are allowed within input() when guessing a word
+# Use a dictionary of words which will imported from a .csv
