@@ -4,14 +4,12 @@ def main():
   import sys
   import csv
   import keyboard
-  
+
+  # Bespoke function that holds all custom functions for the game
+  import func
+
   # Create a list of hangman words
-  wordList = []
-  with open('worddict.csv', encoding='utf-8-sig') as outputFile:
-    outputReader = csv.reader(outputFile)
-    for row in outputReader:
-      wordList.append(row[0])  
-  outputFile.close()
+  func.choose_word()
 
   # Intructions for the player
   print("""\n
@@ -22,14 +20,13 @@ INSTRUCTIONS:\n
 * You will be prompted to include a username for each game (min of 3 characters - max of 6 characters)
 * Your score will be added to a leaderboard at the end of each game""")
 
-
   # Choose a word from the list at random
-  wordChosen = random.choice(wordList)
+  wordChosen = random.choice(func.wordList)
 
   # Create an empty list to store the used letters
   used = []
 
-  # Counter stops the game once all letters have been guessed correctly
+  # Counter - stops the game once all letters have been guessed correctly
   attempts = 1
 
   # Create a variable to store and display the player's guesses  
@@ -40,23 +37,7 @@ INSTRUCTIONS:\n
   # Put a space between each dash
   print(" ".join(display))
 
-  # Ask the a player for their username
-  print("What is your username (Max 6 letters): ")
-  myName = input()[0:6]
-  print("\n")
-  while len(myName)==0:
-    print("Please enter your username (Max 6 characters in length):")
-    myName = input()
-  print("Hi, " + str(myName) + ", welcome to the Word Guessing Game!")
-  print("\n")
-
-  # # Set the allowed chars for the myName input
-  # specChar = "`[];'./§~`{}|:?><"
-  # while len(myName) == 0:
-  #   print("Please enter your username (Max 6 letters):")
-  #   myName=input()
-  # print("Hi, " + str(myName) + ", welcome to the Word Guessing Game!")
-  # print("\n") 
+  func.enter_name()
 
   # Keep asking the player until all letters are guessed
   while display != wordChosen:
@@ -105,7 +86,7 @@ INSTRUCTIONS:\n
     # Add +1 to attempts after each guess
     attempts = attempts + 1
 
-    # Capture date and time of sucessful attempt
+    # Capture date and time of successful attempt
     if display == wordChosen:
       dt = datetime.datetime.now()
       dtFullDate = dt.day, dt.month, dt.year
@@ -116,9 +97,7 @@ INSTRUCTIONS:\n
       # Add the round to the scoreboard
       with open('scoreboard.csv', 'a', newline='') as outputFile:
         outputWriter = csv.DictWriter(outputFile, ['Name', 'Date', 'Attempts', 'Word Chosen'])
-        #outputWriter.writeheader()
-        outputWriter.writerow({'Name' : myName, 'Date' : dtFullDate, 'Attempts' : attempts, 'Word Chosen' : wordChosen})
-        #outputWriter.writerow([myName, dtFullDate, attempts, wordChosen])
+        outputWriter.writerow({'Name' : func.myName, 'Date' : dtFullDate, 'Attempts' : attempts, 'Word Chosen' : wordChosen})
         outputFile.close()
 
         # Display the scoreboard from the scoreboard.csv file
@@ -130,22 +109,11 @@ INSTRUCTIONS:\n
           print(row['Name'], row['Date'], row['Attempts'], row['Word Chosen'])
         outputFile.close()
 
-  print("Well done " + myName.capitalize() + ", you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
+  print("Well done " + func.myName.capitalize() + ", you guessed '" + str(wordChosen) + "' right in " + str(attempts) + " attempts!")
 
   # Ask the player whether they want to retry
   while display == wordChosen:
-      tryAgain = str(input("Try again: (Y = yes / N = no)"))
-      tryAgain = tryAgain.lower()
-      if tryAgain == "y" or tryAgain == "yes":
-        print(tryAgain) # for testing just to see whether its being picked up
-        main()
-      elif tryAgain == "n" or tryAgain == "no":
-        exit()
-        print("else")
-      else:
-        print("\n")
-        print("Invalid input. Please use (Y = yes / N = no)")
-        print("\n")
+    func.retry_game()
 
 main()
 
@@ -154,7 +122,7 @@ main()
 # add a quit function,
 # Add a header to the scoreboard.csv file without it writing after each gameround
 # for the name input, ensure that a minimum of 3 characters are provided and only letters
-# Refactor code = add classes, functions etc
+# Refactor code = add classes, functions etc - enterName(), retry_game(), choose_word() 
 
 
 # Done list -----------
